@@ -1,0 +1,215 @@
+// Import section
+
+import java_cup.runtime.*;
+import java.io.*;
+
+parser code {:
+   public static void main( String[] args )
+   {
+      try
+	  {
+		   FileReader file = new FileReader( args[0] );
+		   Scanner scanner = new MPLexer( file );
+		   MPParser parser = new MPParser( scanner );
+		   parser.parse();
+	  }
+	  catch( Exception e )
+	  {
+		   System.out.println(e);
+	  }
+   }
+:};
+
+
+// Terminal symbols
+terminal MAIN, ID, CONST, FOR, IN, READ, WRITE, ASSIGN;
+terminal LSQUARE, RSQUARE, LROUND, RROUND, LCURLY, RCURLY, SEMICOLON, COMMA;
+terminal INTEGER, CHAR, REAL;
+terminal MUL, DIV, ADD, SUB;
+
+// Nonterminal symbols
+non terminal Program, Block, VarSection, StatementList, VarDecl, Type, NameList, Name;
+non terminal DimList, Dimension, Statement, Variable, Expression, VarList, ExpressionList;
+non terminal Term, Factor, IndexList, Index;
+
+// Grammar
+Program ::= MAIN LROUND RROUND Block
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 1." );
+            :};
+
+
+Block ::= LCURLY VarSection StatementList RCURLY
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 2." );
+            :};
+
+VarSection ::= VarSection VarDecl
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 3." );
+            :}
+            | VarDecl
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 4." );
+            :};
+
+VarDecl ::= Type NameList SEMICOLON
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 5." );
+            :};
+
+NameList ::= NameList COMMA Name
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 6." );
+            :}
+            | Name
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 7." );
+            :};
+
+Name ::= ID DimList
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 8." );
+            :};
+
+DimList ::= DimList Dimension
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 9." );
+            :}
+            |
+            {:
+              System.out.println( "Izvrsena je redukcija po smeni 10." );
+            :};
+
+Dimension ::= LSQUARE CONST RSQUARE
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 11." );
+            :};
+
+Type ::= INTEGER
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 12." );
+            :}
+            | CHAR
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 13." );
+            :}
+            | REAL
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 14." );
+            :};
+
+StatementList ::= StatementList Statement
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 15." );
+            :}
+            | Statement
+            {:
+              System.out.println( "Izvrsena je redukcija po smeni 16." );
+            :};
+
+Statement ::= FOR LROUND Type ID IN ID RROUND Statement
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 18." );
+            :}
+            | Variable ASSIGN Expression SEMICOLON
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 19." );
+            :}
+            | READ LROUND VarList RROUND SEMICOLON
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 20." );
+            :}
+            | WRITE LROUND ExpressionList RROUND SEMICOLON
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 21." );
+            :}
+            | Block
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 22." );
+            :};
+
+Expression ::= Expression ADD Term
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 23." );
+            :}
+            | Expression SUB Term
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 24." );
+            :}
+            | Term
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 25." );
+            :};
+
+Term ::= Term MUL Factor
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 26." );
+            :}
+            | Term DIV Factor
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 27." );
+            :}
+            | Factor
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 28." );
+            :};
+
+Factor ::= Variable
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 29." );
+            :}
+            | CONST
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 30." );
+            :}
+            | LROUND Expression RROUND
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 31." );
+            :};
+
+Variable ::= ID IndexList
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 32." );
+            :};
+
+
+IndexList ::= IndexList Index
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 33." );
+            :}
+            |
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 34." );
+            :};
+
+Index ::= LSQUARE Expression RSQUARE
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 35." );
+            :};
+
+VarList ::= VarList COMMA Variable
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 36." );
+            :}
+            | Variable
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 37." );
+            :};
+
+ExpressionList ::= ExpressionList COMMA Expression
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 38." );
+            :}
+            | Expression
+            {:
+               System.out.println( "Izvrsena je redukcija po smeni 39." );
+            :};
+
+
+	
+
+
+
+
+
